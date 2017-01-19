@@ -1,0 +1,40 @@
+[
+  {
+    "type": "com.mantiso.Drivable",
+    "mapTo": "com.mantiso.Car",
+    "constructorParams": [
+      {
+        "name": "age",
+        "value": 23
+      }
+    ],
+    "singleton": false
+  },
+  {
+    "type": "com.mantiso.Logger",
+    "mapTo": "com.mantiso.FileLogger",
+    "singleton": false
+  },
+  {
+    "type": "com.mantiso.SingleCtorWithFixedArgItf",
+    "mapTo": "com.mantiso.SingleCtorWithFixedArgItfImpl",
+    "singleton": false,
+    "constructorParams": [
+      {
+        "name": "value",
+        "value": 23
+      }
+    ]
+  },
+  {
+    "type": "com.mantiso.SingleCtorWithSingleFixedArgAndSingleReferenceArgItf",
+    "mapTo": "com.mantiso.SingleCtorWithSingleFixedArgAndSingleReferenceArgItfImpl",
+    "singleton": false,
+    "constructorParams": [
+      {
+        "name": "value",
+        "value": "23"
+      }
+    ]
+  }
+]

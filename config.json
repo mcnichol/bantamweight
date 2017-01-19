@@ -1,0 +1,12 @@
+[
+  {
+    "type": "com.mcnichol.stuff.Thing",
+    "mapTo": "com.mcnichol.stuff.ThingImpl",
+    "singleton": false
+  },
+  {
+    "type": "com.mcnichol.stuff.ThingService",
+    "mapTo": "com.mcnichol.stuff.ThingServiceImpl",
+    "singleton": false
+  }
+]
