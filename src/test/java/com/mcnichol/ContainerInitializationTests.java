@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.mcnichol;
 
 import com.mcnichol.framework.Container;
 import com.mcnichol.framework.IoCException;

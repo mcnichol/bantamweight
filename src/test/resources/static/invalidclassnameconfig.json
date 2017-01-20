@@ -1,0 +1,7 @@
+[
+  {
+    "type": "com.mantiso.InvalidLogger",
+    "mapTo": "com.mantiso.FileLogger",
+    "singleton": false
+  }
+]

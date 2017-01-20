@@ -14,3 +14,7 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
+
+tasks.withType(JavaCompile){
+    options.compilerArgs << '-parameters'
+}
