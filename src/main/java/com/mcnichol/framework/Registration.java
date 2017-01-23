@@ -3,13 +3,10 @@ package com.mcnichol.framework;
 import java.util.List;
 
 public class Registration {
-    String mapTo;
-    String type;
-    boolean singleton;
-
-    public List<Constructor> getConstructorParams() {
-        return constructorParams;
-    }
+    private String mapTo;
+    private String type;
+    private boolean singleton;
+    private List<Constructor> constructorParams;
 
     public String getMapTo() {
         return mapTo;
@@ -35,10 +32,13 @@ public class Registration {
         this.singleton = singleton;
     }
 
+    public List<Constructor> getConstructorParams() {
+        return constructorParams;
+    }
+
     public void setConstructorParams(List<Constructor> constructorParams) {
         this.constructorParams = constructorParams;
     }
 
-    List<Constructor> constructorParams;
 
 }

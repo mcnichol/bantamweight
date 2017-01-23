@@ -1,8 +1,8 @@
 package com.mcnichol.framework;
 
 public class Constructor {
-    String name;
-    Object value;
+    private String name;
+    private Object value;
 
     public Object getValue() {
         return value;

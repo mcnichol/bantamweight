@@ -30,7 +30,6 @@ public class LoaderTests {
         }
     }
 
-
     @Test
     public void shouldHaveRegistrationForSpecifiedClass() {
         assertThat(registrations.get(Drivable.class), is(notNullValue()));

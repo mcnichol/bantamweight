@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +20,7 @@ public class Container {
 
     public Container(String configurationPath) throws IoCException {
         File file = new File(configurationPath);
-        if (!file.exists()) {
-            throw new IoCException(new FileNotFoundException());
-        }
+        validateFileExists(file);
 
         Loader loader = new Loader();
 
@@ -32,9 +29,16 @@ public class Container {
         registerConverters();
     }
 
+    private void validateFileExists(File file) throws IoCException {
+        if (!file.exists()) {
+            throw new IoCException(new FileNotFoundException());
+        }
+    }
+
     public <T> T resolve(Class<T> type) throws IoCException {
 
         Registration registration = registrations.get(type);
+
         List<com.mcnichol.framework.Constructor> constructorParams = registration.getConstructorParams();
         T instance = null;
         try {
@@ -43,15 +47,7 @@ public class Container {
 
             Parameter[] parameters = longestConstructor.getParameters();
 
-            List<Object> parameterInstances = new ArrayList<>();
-            for (Parameter parameter : parameters) {
-                Class parameterClass = parameter.getType();
-                if (parameterClass.isPrimitive() || parameterClass.isAssignableFrom(String.class)) {
-                    getNonReferenceParameters(constructorParams, parameterInstances, parameter, parameterClass);
-                } else {
-                    getConfiguredParameters(parameterInstances, parameterClass);
-                }
-            }
+            List<Object> parameterInstances = populateParameterInstances(constructorParams, parameters);
 
             instance = createInstance(longestConstructor, parameterInstances);
 
@@ -59,6 +55,32 @@ public class Container {
             e.printStackTrace();
         }
         return instance;
+    }
+
+    private List<Object> populateParameterInstances(List<com.mcnichol.framework.Constructor> constructorParams, Parameter[] parameters) throws IoCException {
+        List<Object> parameterInstances = new ArrayList<>();
+        for (Parameter parameter : parameters) {
+            Class parameterClass = parameter.getType();
+            if (parameterClass.isPrimitive() || parameterClass.isAssignableFrom(String.class)) {
+                getNonReferenceParameters(constructorParams, parameterInstances, parameter, parameterClass);
+            } else {
+                getConfiguredParameters(parameterInstances, parameterClass);
+            }
+        }
+
+        return parameterInstances;
+    }
+
+    private void registerConverters() {
+        converters.put(boolean.class, Integer::parseInt);
+        converters.put(byte.class, Integer::parseInt);
+        converters.put(int.class, Integer::parseInt);
+        converters.put(short.class, Integer::parseInt);
+        converters.put(long.class, Integer::parseInt);
+        converters.put(float.class, Integer::parseInt);
+        converters.put(double.class, Integer::parseInt);
+        converters.put(String.class, s -> s);
+        converters.put(Character.class, c -> c);
     }
 
     private void getNonReferenceParameters(List<com.mcnichol.framework.Constructor> constructorParams, List<Object> parameterInstances, Parameter parameter, Class parameterClass) {
@@ -145,18 +167,6 @@ public class Container {
             }
         }
         return longestConstructor;
-    }
-
-    private void registerConverters() {
-        converters.put(boolean.class, Integer::parseInt);
-        converters.put(byte.class, Integer::parseInt);
-        converters.put(int.class, Integer::parseInt);
-        converters.put(short.class, Integer::parseInt);
-        converters.put(long.class, Integer::parseInt);
-        converters.put(float.class, Integer::parseInt);
-        converters.put(double.class, Integer::parseInt);
-        converters.put(String.class, s -> s);
-        converters.put(Character.class, c -> c);
     }
 
 
