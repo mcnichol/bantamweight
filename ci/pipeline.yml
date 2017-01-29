@@ -19,5 +19,4 @@ jobs:
         source: {repository: busybox}
       run:
         path: ./source-code/gradlew
-        args:
-        -  clean build
+        args: [clean test]
