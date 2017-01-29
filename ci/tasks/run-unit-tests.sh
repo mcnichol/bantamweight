@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 
-cd source-code
+echo "Show Directory"
 ls -la
+
