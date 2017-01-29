@@ -4,7 +4,7 @@ groups:
   - unit-tests
 
 resources:
-- name: source-code
+- name: bantamweight
   type: git
   source:
     uri: git@github.com:mcnichol/bantamweight.git
@@ -15,7 +15,7 @@ jobs:
   serial: true
   public: true
   plan:
-  - get: source-code
+  - get: bantamweight
     trigger: true
   - task: run-unit-tests
-    file: source-code/ci/run-unit-tests.yml
+    file: bantamweight/ci/run-unit-tests.yml

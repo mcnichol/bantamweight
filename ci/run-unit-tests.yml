@@ -6,8 +6,7 @@ image_resource:
   source: {repository: busybox}
 
 inputs:
-- name: source-code
+- name: bantamweight
 
 run:
-  path: ls
-  args: [-la]
+  path: ./run-unit-tests.sh
