@@ -17,5 +17,5 @@ jobs:
   plan:
   - get: source-code
     trigger: true
-  - task: unit-tests
-    file: source-code/ci/unit.yml
+  - task: run-unit-tests
+    file: source-code/ci/run-unit-tests.yml
