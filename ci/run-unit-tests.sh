@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-echo "Show Directory"
-ls -la
+cd bantamweight
+./gradlew clean test
 
