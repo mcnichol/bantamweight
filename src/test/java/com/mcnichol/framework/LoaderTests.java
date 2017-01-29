@@ -13,18 +13,22 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LoaderTests {
     Map<Class, Registration> registrations;
+    private ResourceFileLoader resourceFileLoader;
 
 
     @Before
     public void beforeEach() {
-        File configurationPath = new File("static/config.json");
+        resourceFileLoader = new ResourceFileLoader();
+        
         try {
+            File file = resourceFileLoader.loadRelativeFile("static/config.json");
             Loader loader = new Loader();
-            registrations = loader.loadConfiguration(configurationPath);
+            registrations = loader.loadConfiguration(file);
 
         } catch (IoCException e) {
             e.printStackTrace();
         }
+
     }
 
     @Test
@@ -48,10 +52,10 @@ public class LoaderTests {
 
     @Test(expected = ClassNotFoundException.class)
     public void shouldThrowExceptionWhenLoadingClassThatDoesNotExist() throws Throwable {
-        File configurationPath = new File("static/invalidclassnameconfig.json");
+        File file = resourceFileLoader.loadRelativeFile("static/invalidclassnameconfig.json");
         try {
             Loader loader = new Loader();
-            registrations = loader.loadConfiguration(configurationPath);
+            registrations = loader.loadConfiguration(file);
 
         } catch (IoCException e) {
             throw e.getCause();
@@ -60,8 +64,10 @@ public class LoaderTests {
 
     @Test(expected = IoCException.class)
     public void shouldThrowAnExceptionWhenTheConfigurationIsInvalid() throws IoCException {
+
+        File file = resourceFileLoader.loadRelativeFile("invalidConfiguration.json");
         Loader loader = new Loader();
-        registrations = loader.loadConfiguration(new File("invalidConfiguration.json"));
+        registrations = loader.loadConfiguration(file);
     }
 
 }
