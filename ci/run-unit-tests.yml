@@ -9,4 +9,5 @@ inputs:
 - name: source-code
 
 run:
-  path: ./run-unit-tests.sh
+  path: ls
+  args: -la
