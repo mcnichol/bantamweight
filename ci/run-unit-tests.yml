@@ -9,4 +9,4 @@ inputs:
 - name: source-code
 
 run:
-  path: source-code/ci/tasks/run-unit-tests.sh
+  path: ./run-unit-tests.sh
