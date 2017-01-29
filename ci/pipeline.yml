@@ -1,0 +1,23 @@
+resources:
+- name: source-code
+  type: git
+  source:
+    uri: git@github.com:mcnichol/bantamweight.git
+    branch: master
+    private_key: {{ssh_private_key}}
+jobs:
+- name: job-hello-world
+  public: true
+  plan:
+  - get: source-code
+    trigger: true
+  - task: unit-test
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}
+      run:
+        path: ./source-code/gradlew
+        args:
+        -  clean build
