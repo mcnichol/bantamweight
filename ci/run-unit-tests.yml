@@ -10,5 +10,4 @@ inputs:
 
 run:
   path: ls
-  args:
-  - -la
+  args: [-la source-code]
