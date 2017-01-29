@@ -1,3 +1,8 @@
+groups:
+- name: delivery
+  jobs:
+  - unit-tests
+
 resources:
 - name: source-code
   type: git
@@ -6,17 +11,11 @@ resources:
     branch: master
     private_key: {{ssh_private_key}}
 jobs:
-- name: job-hello-world
+- name: unit-tests
+  serial: true
   public: true
   plan:
   - get: source-code
     trigger: true
-  - task: unit-test
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source: {repository: busybox}
-      run:
-        path: ./source-code/gradlew
-        args: [clean test]
+  - task: unit-tests
+    file: source-code/ci/unit.yml
