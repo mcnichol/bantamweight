@@ -1,7 +1,6 @@
 package com.mcnichol.framework;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
@@ -18,21 +17,15 @@ public class Container {
         T convert(String valueAsString);
     }
 
-    public Container(String configurationPath) throws IoCException {
-        File file = new File(configurationPath);
-        validateFileExists(file);
+    public Container(String staticResource) throws IoCException {
+        ResourceFileLoader rfl = new ResourceFileLoader();
+        File configPath = rfl.loadRelativeFile(staticResource);
 
         Loader loader = new Loader();
 
-        registrations = loader.loadConfiguration(configurationPath);
+        registrations = loader.loadConfiguration(configPath);
 
         registerConverters();
-    }
-
-    private void validateFileExists(File file) throws IoCException {
-        if (!file.exists()) {
-            throw new IoCException(new FileNotFoundException());
-        }
     }
 
     public <T> T resolve(Class<T> type) throws IoCException {
@@ -54,11 +47,14 @@ public class Container {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+
         return instance;
     }
 
     private List<Object> populateParameterInstances(List<com.mcnichol.framework.Constructor> constructorParams, Parameter[] parameters) throws IoCException {
+
         List<Object> parameterInstances = new ArrayList<>();
+
         for (Parameter parameter : parameters) {
             Class parameterClass = parameter.getType();
             if (parameterClass.isPrimitive() || parameterClass.isAssignableFrom(String.class)) {
@@ -93,10 +89,10 @@ public class Container {
         }
 
         Converter c = converters.get(parameterClass);
-        parameterInstances.add(c.convert(value.toString()));
+        parameterInstances.add(c.convert(String.valueOf(value)));
     }
 
-    private void getConfiguredParameters(List<Object> parameterInstances, Class parameterClass) throws IoCException {
+    private void getConfiguredParameters(List<Object> parameterInstances, Class<?> parameterClass) throws IoCException {
         Object resolvedInstance = resolve(parameterClass);
         parameterInstances.add(resolvedInstance);
     }

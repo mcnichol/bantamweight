@@ -1,7 +1,5 @@
-package com.mcnichol;
+package com.mcnichol.framework;
 
-import com.mcnichol.framework.Container;
-import com.mcnichol.framework.IoCException;
 import org.junit.Test;
 
 public class ContainerInitializationTests {

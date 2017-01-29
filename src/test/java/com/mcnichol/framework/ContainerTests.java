@@ -1,8 +1,6 @@
-package com.mcnichol;
+package com.mcnichol.framework;
 
 import com.mantiso.*;
-import com.mcnichol.framework.Container;
-import com.mcnichol.framework.IoCException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +9,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
 
 public class ContainerTests {
 
@@ -19,7 +16,7 @@ public class ContainerTests {
 
     @Before
     public void beforeEach() {
-        String configurationPath = "testConfigurations/config.json";
+        String configurationPath = "static/config.json";
         try {
             container = new Container(configurationPath);
         } catch (IoCException e) {
@@ -29,7 +26,7 @@ public class ContainerTests {
 
     @Test
     public void shouldLoadRegistrations() {
-        String configurationPath = "testConfigurations/simpleconfig.json";
+        String configurationPath = "static/simpleconfig.json";
         try {
             container = new Container(configurationPath);
         } catch (IoCException e) {

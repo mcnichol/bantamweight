@@ -2,9 +2,9 @@ package com.mcnichol.framework;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -12,28 +12,23 @@ import java.util.List;
 import java.util.Map;
 
 public class Loader {
-    public Map<Class, Registration> loadConfiguration(String filename) throws IoCException {
+    public Map<Class, Registration> loadConfiguration(File file) throws IoCException {
 
         Map<Class, Registration> registrations = new HashMap<>();
 
         try {
-            Path path = createFilePathFromRoot(filename);
 
-            String configContents = readConfigFile(path);
+            String configContents = readConfigFile(file.toPath());
 
             List<Registration> parsedReg = parseRegistrationFromConfig(configContents);
 
             populateRegistrations(registrations, parsedReg);
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | NullPointerException e) {
             throw new IoCException(e);
         }
 
         return registrations;
-    }
-
-    private Path createFilePathFromRoot(String filename) {
-        return FileSystems.getDefault().getPath(filename);
     }
 
     private void populateRegistrations(Map<Class, Registration> registrations, List<Registration> parsedReg) throws ClassNotFoundException {

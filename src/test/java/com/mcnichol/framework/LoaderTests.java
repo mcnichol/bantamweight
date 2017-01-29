@@ -1,13 +1,10 @@
-package com.mcnichol;
+package com.mcnichol.framework;
 
 import com.mantiso.Drivable;
-import com.mcnichol.framework.Constructor;
-import com.mcnichol.framework.IoCException;
-import com.mcnichol.framework.Loader;
-import com.mcnichol.framework.Registration;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -20,7 +17,7 @@ public class LoaderTests {
 
     @Before
     public void beforeEach() {
-        String configurationPath = "testConfigurations/config.json";
+        File configurationPath = new File("static/config.json");
         try {
             Loader loader = new Loader();
             registrations = loader.loadConfiguration(configurationPath);
@@ -51,7 +48,7 @@ public class LoaderTests {
 
     @Test(expected = ClassNotFoundException.class)
     public void shouldThrowExceptionWhenLoadingClassThatDoesNotExist() throws Throwable {
-        String configurationPath = "testConfigurations/invalidclassnameconfig.json";
+        File configurationPath = new File("static/invalidclassnameconfig.json");
         try {
             Loader loader = new Loader();
             registrations = loader.loadConfiguration(configurationPath);
@@ -64,7 +61,7 @@ public class LoaderTests {
     @Test(expected = IoCException.class)
     public void shouldThrowAnExceptionWhenTheConfigurationIsInvalid() throws IoCException {
         Loader loader = new Loader();
-        registrations = loader.loadConfiguration("invalidConfiguration.json");
+        registrations = loader.loadConfiguration(new File("invalidConfiguration.json"));
     }
 
 }
