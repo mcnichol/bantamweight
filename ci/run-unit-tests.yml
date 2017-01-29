@@ -9,5 +9,4 @@ inputs:
 - name: source-code
 
 run:
-  path: ls source-code
-  args: [la]
+  path: source-code/ci/tasks/run-unit-tests.sh
