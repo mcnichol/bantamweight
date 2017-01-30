@@ -1,0 +1,12 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: sonarqube, tag: "6.2"}
+
+inputs:
+- name: bantamweight
+
+run:
+  path: bantamweight/ci/tasks/run-unit-tests.sh

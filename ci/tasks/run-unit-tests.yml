@@ -9,4 +9,4 @@ inputs:
 - name: bantamweight
 
 run:
-  path: bantamweight/ci/run-unit-tests.sh
+  path: bantamweight/ci/tasks/run-unit-tests.sh
