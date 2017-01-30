@@ -18,7 +18,7 @@ jobs:
   - get: bantamweight
     trigger: true
   - task: run-unit-tests
-    file: bantamweight/ci/tasks/run-unit-tests.yml- name: unit-tests
+    file: bantamweight/ci/tasks/run-unit-tests.yml
 - name: sonarqube
   serial: true
   public: true
