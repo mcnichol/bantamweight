@@ -33,7 +33,7 @@ public class Container {
         Registration registration = registrations.get(type);
 
         List<com.mcnichol.framework.Constructor> constructorParams = registration.getConstructorParams();
-        T instance = null;
+        T instance;
         try {
             Class cls = Class.forName(registration.getMapTo());
             Constructor longestConstructor = getLongestConstructor(cls);
@@ -45,7 +45,7 @@ public class Container {
             instance = createInstance(longestConstructor, parameterInstances);
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            throw new IoCException(e);
         }
 
         return instance;
@@ -106,10 +106,8 @@ public class Container {
         for (int i = 0; i < parameterTypes.length; i++) {
             Class argumentClass = parameterInstances.get(i).getClass();
             Class parameterClass = parameterTypes[i].getType();
-            if (parameterClass.isPrimitive() || argumentClass.isPrimitive()) {
-                if (primitivesMatch(argumentClass, parameterClass)) {
-                    parameters[i] = parameterInstances.get(i);
-                }
+            if (parameterClass.isPrimitive() || argumentClass.isPrimitive() && primitivesMatch(argumentClass, parameterClass)) {
+                parameters[i] = parameterInstances.get(i);
             }
 
             if (parameterClass.isAssignableFrom(argumentClass)) {
@@ -122,35 +120,72 @@ public class Container {
     }
 
     private boolean primitivesMatch(Class argumentClass, Class parameterClass) {
-        if ((argumentClass == int.class || argumentClass == Integer.class) && (parameterClass == int.class || parameterClass == Integer.class)) {
+        if (isByte(argumentClass) && (isByte(parameterClass))) {
             return true;
         }
-        if ((argumentClass == byte.class || argumentClass == Byte.class) && (parameterClass == byte.class || parameterClass == Byte.class)) {
+
+        if (isShort(argumentClass) && (isShort(parameterClass))) {
             return true;
         }
-        if ((argumentClass == short.class || argumentClass == Short.class) && (parameterClass == short.class || parameterClass == Short.class)) {
+
+        if (isCharacter(argumentClass) && (isCharacter(parameterClass))) {
             return true;
         }
-        if ((argumentClass == long.class || argumentClass == Long.class) && (parameterClass == long.class || parameterClass == Long.class)) {
+
+        if (isInteger(argumentClass) && (isInteger(parameterClass))) {
             return true;
         }
-        if ((argumentClass == char.class || argumentClass == Character.class) && (parameterClass == char.class || parameterClass == Character.class)) {
+
+        if (isLong(argumentClass) && (isLong(parameterClass))) {
             return true;
         }
-        if ((argumentClass == double.class || argumentClass == Double.class) && (parameterClass == double.class || parameterClass == Double.class)) {
+
+        if (isDouble(argumentClass) && (isDouble(parameterClass))) {
             return true;
         }
-        if ((argumentClass == float.class || argumentClass == Float.class) && (parameterClass == float.class || parameterClass == Float.class)) {
+
+        if (isFloat(argumentClass) && (isFloat(parameterClass))) {
             return true;
         }
-        if ((argumentClass == boolean.class || argumentClass == Boolean.class) && (parameterClass == boolean.class || parameterClass == Boolean.class)) {
+
+        if (isBoolean(argumentClass) && (isBoolean(parameterClass))) {
             return true;
         }
-        if ((argumentClass == int.class || argumentClass == Integer.class) && (parameterClass == int.class || parameterClass == Integer.class)) {
-            return true;
-        }
+
         return false;
 
+    }
+
+    private boolean isDouble(Class cls) {
+        return cls == double.class || cls == Double.class;
+    }
+
+    private boolean isFloat(Class cls) {
+        return cls == float.class || cls == Float.class;
+    }
+
+    private boolean isBoolean(Class cls) {
+        return cls == boolean.class || cls == Boolean.class;
+    }
+
+    private boolean isLong(Class cls) {
+        return cls == long.class || cls == Long.class;
+    }
+
+    private boolean isCharacter(Class cls) {
+        return cls == char.class || cls == Character.class;
+    }
+
+    private boolean isShort(Class cls) {
+        return cls == short.class || cls == Short.class;
+    }
+
+    private boolean isByte(Class cls) {
+        return cls == byte.class || cls == Byte.class;
+    }
+
+    private boolean isInteger(Class cls) {
+        return cls == int.class || cls == Integer.class;
     }
 
     private Constructor getLongestConstructor(Class cls) {

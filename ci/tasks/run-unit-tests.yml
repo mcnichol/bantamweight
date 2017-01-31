@@ -6,7 +6,10 @@ image_resource:
   source: {repository: openjdk, tag: "8"}
 
 inputs:
-- name: bantamweight
+  - name: bantamweight
+
+outputs:
+  - name: updated-bantamweight
 
 run:
   path: bantamweight/ci/tasks/run-unit-tests.sh

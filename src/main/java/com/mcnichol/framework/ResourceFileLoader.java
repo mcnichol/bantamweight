@@ -5,9 +5,6 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 
 public class ResourceFileLoader {
-    public ResourceFileLoader() {
-
-    }
 
     public void validateFile(File file) throws IoCException {
         if (!file.exists()) {

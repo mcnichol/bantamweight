@@ -2,6 +2,7 @@ groups:
 - name: delivery
   jobs:
   - unit-tests
+  - sonarqube
 
 resources:
 - name: bantamweight
@@ -10,20 +11,20 @@ resources:
     uri: git@github.com:mcnichol/bantamweight.git
     branch: master
     private_key: {{ssh_private_key}}
+
 jobs:
 - name: unit-tests
   serial: true
-  public: true
   plan:
   - get: bantamweight
     trigger: true
   - task: run-unit-tests
     file: bantamweight/ci/tasks/run-unit-tests.yml
+
 - name: sonarqube
-  serial: true
-  public: true
   plan:
   - get: bantamweight
     trigger: true
+    passed: [unit-tests]
   - task: run-sonarqube
     file: bantamweight/ci/tasks/run-sonarqube.yml

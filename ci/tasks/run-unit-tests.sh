@@ -2,4 +2,3 @@
 
 cd bantamweight
 ./gradlew clean test
-

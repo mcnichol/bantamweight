@@ -1,5 +1,10 @@
+plugins {
+    id "org.sonarqube" version "2.2.1"
+}
+
 group 'com.mcnichol.framework'
 version '1.0-SNAPSHOT'
+
 
 apply plugin: 'java'
 
@@ -19,6 +24,7 @@ dependencies {
 tasks.withType(JavaCompile){
     options.compilerArgs << '-parameters'
 }
+
 
 test {
     testLogging {
