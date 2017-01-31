@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Container {
-    public Map<Class, Registration> registrations;
-    public Map<Class, Converter> converters = new HashMap<>();
+    Map<Class, Registration> registrations;
+    private Map<Class, Converter> converters = new HashMap<>();
+    private Map<Class, Class> javaTypes = new HashMap<>();
 
+    @FunctionalInterface
     interface Converter<T> {
         T convert(String valueAsString);
     }
@@ -26,6 +28,7 @@ public class Container {
         registrations = loader.loadConfiguration(configPath);
 
         registerConverters();
+        registerJavaTypes();
     }
 
     public <T> T resolve(Class<T> type) throws IoCException {
@@ -68,15 +71,26 @@ public class Container {
     }
 
     private void registerConverters() {
-        converters.put(boolean.class, Integer::parseInt);
-        converters.put(byte.class, Integer::parseInt);
+        converters.put(boolean.class, Boolean::parseBoolean);
+        converters.put(byte.class, Byte::parseByte);
         converters.put(int.class, Integer::parseInt);
-        converters.put(short.class, Integer::parseInt);
-        converters.put(long.class, Integer::parseInt);
-        converters.put(float.class, Integer::parseInt);
-        converters.put(double.class, Integer::parseInt);
+        converters.put(short.class, Short::parseShort);
+        converters.put(long.class, Long::parseLong);
+        converters.put(float.class, Float::parseFloat);
+        converters.put(double.class, Double::parseDouble);
         converters.put(String.class, s -> s);
         converters.put(Character.class, c -> c);
+    }
+
+    private void registerJavaTypes() {
+        javaTypes.put(boolean.class, Boolean.class);
+        javaTypes.put(byte.class, Byte.class);
+        javaTypes.put(short.class, Short.class);
+        javaTypes.put(char.class, Character.class);
+        javaTypes.put(int.class, Integer.class);
+        javaTypes.put(long.class, Long.class);
+        javaTypes.put(double.class, Double.class);
+        javaTypes.put(float.class, Float.class);
     }
 
     private void getNonReferenceParameters(List<com.mcnichol.framework.Constructor> constructorParams, List<Object> parameterInstances, Parameter parameter, Class parameterClass) {
@@ -120,72 +134,16 @@ public class Container {
     }
 
     private boolean primitivesMatch(Class argumentClass, Class parameterClass) {
-        if (isByte(argumentClass) && (isByte(parameterClass))) {
-            return true;
-        }
+        final boolean[] matches = {false};
 
-        if (isShort(argumentClass) && (isShort(parameterClass))) {
-            return true;
-        }
+        javaTypes.forEach((k, v) -> {
+            if ((argumentClass == k || argumentClass == v) && (parameterClass == k && parameterClass == v)) {
+                matches[0] = true;
 
-        if (isCharacter(argumentClass) && (isCharacter(parameterClass))) {
-            return true;
-        }
+            }
+        });
 
-        if (isInteger(argumentClass) && (isInteger(parameterClass))) {
-            return true;
-        }
-
-        if (isLong(argumentClass) && (isLong(parameterClass))) {
-            return true;
-        }
-
-        if (isDouble(argumentClass) && (isDouble(parameterClass))) {
-            return true;
-        }
-
-        if (isFloat(argumentClass) && (isFloat(parameterClass))) {
-            return true;
-        }
-
-        if (isBoolean(argumentClass) && (isBoolean(parameterClass))) {
-            return true;
-        }
-
-        return false;
-
-    }
-
-    private boolean isDouble(Class cls) {
-        return cls == double.class || cls == Double.class;
-    }
-
-    private boolean isFloat(Class cls) {
-        return cls == float.class || cls == Float.class;
-    }
-
-    private boolean isBoolean(Class cls) {
-        return cls == boolean.class || cls == Boolean.class;
-    }
-
-    private boolean isLong(Class cls) {
-        return cls == long.class || cls == Long.class;
-    }
-
-    private boolean isCharacter(Class cls) {
-        return cls == char.class || cls == Character.class;
-    }
-
-    private boolean isShort(Class cls) {
-        return cls == short.class || cls == Short.class;
-    }
-
-    private boolean isByte(Class cls) {
-        return cls == byte.class || cls == Byte.class;
-    }
-
-    private boolean isInteger(Class cls) {
-        return cls == int.class || cls == Integer.class;
+        return matches[0];
     }
 
     private Constructor getLongestConstructor(Class cls) {
