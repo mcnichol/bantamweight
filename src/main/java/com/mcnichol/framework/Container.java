@@ -28,34 +28,27 @@ public class Container {
         registrations = loader.loadConfiguration(configPath);
 
         registerConverters();
-        registerJavaTypes();
+        loadJavaTypes();
     }
 
     public <T> T resolve(Class<T> type) throws IoCException {
-
         Registration registration = registrations.get(type);
-
         List<com.mcnichol.framework.Constructor> constructorParams = registration.getConstructorParams();
         T instance;
+
         try {
             Class cls = Class.forName(registration.getMapTo());
             Constructor longestConstructor = getLongestConstructor(cls);
-
             Parameter[] parameters = longestConstructor.getParameters();
-
             List<Object> parameterInstances = populateParameterInstances(constructorParams, parameters);
-
             instance = createInstance(longestConstructor, parameterInstances);
-
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new IoCException(e);
         }
-
         return instance;
     }
 
     private List<Object> populateParameterInstances(List<com.mcnichol.framework.Constructor> constructorParams, Parameter[] parameters) throws IoCException {
-
         List<Object> parameterInstances = new ArrayList<>();
 
         for (Parameter parameter : parameters) {
@@ -66,15 +59,14 @@ public class Container {
                 getConfiguredParameters(parameterInstances, parameterClass);
             }
         }
-
         return parameterInstances;
     }
 
     private void registerConverters() {
         converters.put(boolean.class, Boolean::parseBoolean);
         converters.put(byte.class, Byte::parseByte);
-        converters.put(int.class, Integer::parseInt);
         converters.put(short.class, Short::parseShort);
+        converters.put(int.class, Integer::parseInt);
         converters.put(long.class, Long::parseLong);
         converters.put(float.class, Float::parseFloat);
         converters.put(double.class, Double::parseDouble);
@@ -82,7 +74,7 @@ public class Container {
         converters.put(Character.class, c -> c);
     }
 
-    private void registerJavaTypes() {
+    private void loadJavaTypes() {
         javaTypes.put(boolean.class, Boolean.class);
         javaTypes.put(byte.class, Byte.class);
         javaTypes.put(short.class, Short.class);
@@ -136,10 +128,9 @@ public class Container {
     private boolean primitivesMatch(Class argumentClass, Class parameterClass) {
         final boolean[] matches = {false};
 
-        javaTypes.forEach((k, v) -> {
-            if ((argumentClass == k || argumentClass == v) && (parameterClass == k && parameterClass == v)) {
+        javaTypes.forEach((primitiveClass, objectClass) -> {
+            if ((argumentClass == primitiveClass || argumentClass == objectClass) && (parameterClass == primitiveClass && parameterClass == objectClass)) {
                 matches[0] = true;
-
             }
         });
 
@@ -157,6 +148,4 @@ public class Container {
         }
         return longestConstructor;
     }
-
-
 }
