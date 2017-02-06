@@ -12,4 +12,4 @@ outputs:
   - name: updated-bantamweight
 
 run:
-  path: bantamweight/ci/tasks/run-unit-tests.sh
+  path: bantamweight/ci/tasks/unit-test/run-unit-tests.sh

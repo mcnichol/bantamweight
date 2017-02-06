@@ -14,12 +14,11 @@ resources:
 
 jobs:
 - name: unit-tests
-  serial: true
   plan:
   - get: bantamweight
     trigger: true
   - task: run-unit-tests
-    file: bantamweight/ci/tasks/run-unit-tests.yml
+    file: bantamweight/ci/tasks/unit-test/run-unit-tests.yml
 
 - name: sonarqube
   plan:
@@ -27,4 +26,4 @@ jobs:
     trigger: true
     passed: [unit-tests]
   - task: run-sonarqube
-    file: bantamweight/ci/tasks/run-sonarqube.yml
+    file: bantamweight/ci/tasks/sonarqube/run-sonarqube.yml

@@ -9,4 +9,4 @@ inputs:
 - name: bantamweight
 
 run:
-  path: bantamweight/ci/tasks/run-sonarqube.sh
+  path: bantamweight/ci/tasks/sonarqube/run-sonarqube.sh
