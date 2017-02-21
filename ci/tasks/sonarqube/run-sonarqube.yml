@@ -3,7 +3,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: sonarqube, tag: "6.2"}
+  source: {repository: sonarqube, tag: "latest"}
 
 inputs:
 - name: bantamweight
