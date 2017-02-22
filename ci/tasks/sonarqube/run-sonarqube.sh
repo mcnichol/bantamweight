@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 cd bantamweight
-./gradlew sonarqube
+./gradlew sonarqube -x test
